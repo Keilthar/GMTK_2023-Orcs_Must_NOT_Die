@@ -94,7 +94,6 @@ public class Enemy_Controler : MonoBehaviour
 
     public void Death()
     {
-        Game_Manager.Singleton.enemy_Kill_Counter++;
         StartCoroutine(Die());
     }
 

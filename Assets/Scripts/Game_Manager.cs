@@ -18,22 +18,31 @@ public class Game_Manager : MonoBehaviour
 #endregion
 
     public Transform cam;
-    const int mana_Max = 100;
-    public int mana_Current;
-    public int enemy_Kill_Counter;
+
+    public bool isGameStarted;
+    float game_Timer;
+    public int orcs_Saved;
+    public int orcs_ToSave = 20;
 
     bool mouse_left_pressed;
     bool mouse_right_pressed;
     bool rotation_Pressed;
+    Transform magics_Parent;
+    Transform orcs_Parent;
 
     void Start()
     {
-        enemy_Kill_Counter = 0;
         cam = GameObject.Find("Main Camera").transform;
+        magics_Parent = transform.Find("Magics");
+        orcs_Parent = transform.Find("Orcs");
+        Init_Game();
     }
 
     void Update()
     {
+        if (isGameStarted == true)
+            game_Timer += Time.deltaTime;
+
         mouse_left_pressed = false;
         mouse_right_pressed = false;
         rotation_Pressed = false;
@@ -44,10 +53,60 @@ public class Game_Manager : MonoBehaviour
             mouse_right_pressed = true;
         if (Input.GetKeyDown(KeyCode.R))
             rotation_Pressed = true;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            Enemy_Manager.Singleton.Spawn_Group(1);
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            MagicWall_Cast();
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            Heal_Cast();
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            Shield_Cast();        
     }
 
+    void Init_Game()
+    {
+        isGameStarted = false;
+        orcs_Saved = 0;
+        game_Timer = 0f;
+        Clear_Magic();
+        Clear_Orcs();
+    }
+
+    public void Orc_Saved()
+    {
+        orcs_Saved ++;
+        if (orcs_Saved >= orcs_ToSave)
+        {
+            Debug.Log("Game Win in " + game_Timer);
+            Init_Game();
+        }
+    }
+
+    void Clear_Magic()
+    {
+        StopAllCoroutines();
+        foreach (Transform child in magics_Parent)
+        {
+            MagicWall_Controler wall = child.GetComponent<MagicWall_Controler>();
+            if (wall != null)
+            {
+                if (wall.isDeployed == false || isGameStarted == false)
+                    Destroy(child.gameObject);
+            }
+            else Destroy(child.gameObject);
+        } 
+    }
+
+    void Clear_Orcs()
+    {
+        foreach (Transform child in orcs_Parent)
+            Destroy(child.gameObject);
+    }
+    
     public void MagicWall_Cast()
     {
+        Clear_Magic();
         StartCoroutine(MagicWall_Placement());
     }
 
@@ -55,8 +114,9 @@ public class Game_Manager : MonoBehaviour
     {
         bool isMagicDeployed = false;
         GameObject prefab = Resources.Load<GameObject>("Magics/MagicWall");
-        GameObject magicWall = Instantiate(prefab, Vector3.down * 10, Quaternion.identity);
-        magicWall.transform.rotation = Quaternion.Euler(0,0,90);
+        GameObject spell = Instantiate(prefab, Vector3.down * 10, Quaternion.identity);
+        spell.transform.rotation = Quaternion.Euler(0,0,90);
+        spell.transform.parent = magics_Parent;
 
         while (isMagicDeployed == false)
         {
@@ -72,22 +132,23 @@ public class Game_Manager : MonoBehaviour
 
             Vector3 mousePosition = Mouse_Get_Position();
             Vector3 offsetPosition = Vector3.up * 2.5f;
-            magicWall.transform.position = mousePosition + offsetPosition;
-            magicWall.transform.rotation *=  Quaternion.Euler(rotation);
+            spell.transform.position = mousePosition + offsetPosition;
+            spell.transform.rotation *=  Quaternion.Euler(rotation);
 
             yield return new WaitForEndOfFrame();
         }
 
         if (isMagicDeployed == true)
-            magicWall.GetComponent<MagicWall_Controler>().Init();
+            spell.GetComponent<MagicWall_Controler>().Init();
         else
-            Destroy(magicWall);
+            Destroy(spell);
         
         yield break;
     }
 
     public void Heal_Cast()
     {
+        Clear_Magic();
         StartCoroutine(Heal_Placement());
     }
 
@@ -95,8 +156,9 @@ public class Game_Manager : MonoBehaviour
     {
         bool isMagicDeployed = false;
         GameObject prefab = Resources.Load<GameObject>("Magics/Heal");
-        GameObject magicWall = Instantiate(prefab, Vector3.down * 10, Quaternion.identity);
-        magicWall.transform.rotation = Quaternion.Euler(0,0,90);
+        GameObject spell = Instantiate(prefab, Vector3.down * 10, Quaternion.identity);
+        spell.transform.rotation = Quaternion.Euler(0,0,90);
+        spell.transform.parent = magics_Parent;
 
         while (isMagicDeployed == false)
         {
@@ -112,22 +174,23 @@ public class Game_Manager : MonoBehaviour
 
             Vector3 mousePosition = Mouse_Get_Position();
             Vector3 offsetPosition = Vector3.up * 0f;
-            magicWall.transform.position = mousePosition + offsetPosition;
-            magicWall.transform.rotation *=  Quaternion.Euler(rotation);
+            spell.transform.position = mousePosition + offsetPosition;
+            spell.transform.rotation *=  Quaternion.Euler(rotation);
 
             yield return new WaitForEndOfFrame();
         }
 
         if (isMagicDeployed == true)
-            magicWall.GetComponent<Heal_Controler>().Heal();
+            spell.GetComponent<Heal_Controler>().Heal();
         else
-            Destroy(magicWall);
+            Destroy(spell);
         
         yield break;
     }
 
     public void Shield_Cast()
     {
+        Clear_Magic();
         StartCoroutine(Shield_Placement());
     }
 
@@ -137,6 +200,7 @@ public class Game_Manager : MonoBehaviour
         GameObject prefab = Resources.Load<GameObject>("Magics/Shield");
         GameObject spell = Instantiate(prefab, Vector3.down * 10, Quaternion.identity);
         spell.transform.rotation = Quaternion.Euler(0,0,90);
+        spell.transform.parent = magics_Parent;
 
         while (isMagicDeployed == false)
         {

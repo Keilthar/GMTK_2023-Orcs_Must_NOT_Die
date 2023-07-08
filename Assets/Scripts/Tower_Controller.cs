@@ -10,6 +10,7 @@ public class Tower_Controller : MonoBehaviour
     public int fire_Damage = 25;
     public int fire_Rate = 5;
     float fire_Cooldown;
+    int targetID;
 
     void Awake()
     {
@@ -21,39 +22,57 @@ public class Tower_Controller : MonoBehaviour
 
     void Update()
     {
+        if (Game_Manager.Singleton.isGameStarted == false)
+        {
+            L_Targets = new List<GameObject>();
+            return;
+        }
+            
         // Refresh fire cooldown
         if (fire_Cooldown > 0)
             fire_Cooldown -= Time.deltaTime;
 
         // Check if enemies still alive and adjust target list
+        bool isTargetListChanged = false;
         if (L_Targets.Count > 0)
         {
             for (int targetNum = L_Targets.Count-1; targetNum >= 0; targetNum--)
             {
                 Enemy_Controler enemy = L_Targets[targetNum].GetComponent<Enemy_Controler>();
-                if (enemy.Is_Alive() == false)
+                if (enemy == null)
+                {
                     L_Targets.RemoveAt(targetNum);
+                    isTargetListChanged = true;
+                }                    
+                else if (enemy.Is_Alive() == false)
+                {
+                    L_Targets.RemoveAt(targetNum);
+                    isTargetListChanged = true;
+                }
             }
         }
 
         // Look at target and fire if cooldown up
         if (L_Targets.Count > 0)
         {
-            canon.transform.LookAt(L_Targets[0].transform.position);
+            if (isTargetListChanged == true)
+                targetID = Random.Range(0, L_Targets.Count);
+
+            canon.transform.LookAt(L_Targets[targetID].transform.position);
             canon.rotation *= Quaternion.Euler(90,0,0);
             if (fire_Cooldown <= 0)
             {
                 fire_Cooldown = (float) 1/fire_Rate;
-                Fire_OnFirstTarget();
+                Fire_OnFirstTarget(targetID);
             }
         }
     }
 
-    void Fire_OnFirstTarget()
+    void Fire_OnFirstTarget(int TargetID)
     {
-        Enemy_Controler enemy = L_Targets[0].GetComponent<Enemy_Controler>();
+        Enemy_Controler enemy = L_Targets[TargetID].GetComponent<Enemy_Controler>();
         GameObject projectile = Instantiate(projectile_Prefab, transform.position, Quaternion.identity);
-        projectile.GetComponent<Projectile_Controler>().Init(L_Targets[0].transform, canon.position, fire_Damage);
+        projectile.GetComponent<Projectile_Controler>().Init(L_Targets[TargetID].transform, canon.position, fire_Damage);
     }
 
     void OnTriggerEnter(Collider other)

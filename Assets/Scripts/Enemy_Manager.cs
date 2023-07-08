@@ -112,6 +112,8 @@ public class Enemy_Manager : MonoBehaviour
         public int shaman_Health = 50;
 
     int enemyCounter;
+    float spawn_Cooldown = 1f;
+    float spawn_Timer;
     
 
     void Start()
@@ -119,14 +121,28 @@ public class Enemy_Manager : MonoBehaviour
         enemyCounter = 0;
     }
 
+    void Update()
+    {
+        if (spawn_Timer > 0)
+            spawn_Timer -= Time.deltaTime;
+    }
+
     public void Spawn_Group(int GroupID)
     {
-        GameObject prefab = Resources.Load<GameObject>("Enemies/Groups/Group_" + GroupID);
-        GameObject enemy = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-        if (enemy != null)
+        if (spawn_Timer <= 0)
         {
-            enemy.transform.parent = transform;
-            enemyCounter++;
+            spawn_Timer = spawn_Cooldown;
+            if (Game_Manager.Singleton.isGameStarted == false)
+                Game_Manager.Singleton.isGameStarted = true;
+
+            GameObject prefab = Resources.Load<GameObject>("Enemies/Groups/Group_" + GroupID);
+            GameObject enemy = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            if (enemy != null)
+            {
+                enemy.transform.parent = transform;
+                enemyCounter++;
+            }
         }
+
     }
 }

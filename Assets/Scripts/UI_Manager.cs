@@ -19,7 +19,6 @@ public class UI_Manager : MonoBehaviour
 #endregion
 
     VisualElement root;
-    Button BT_Spawn;
     Button BT_MagicWall;
     Button BT_Heal;
     Button BT_Shield;
@@ -27,8 +26,6 @@ public class UI_Manager : MonoBehaviour
     void Start()
     {
         root = transform.GetComponent<UIDocument>().rootVisualElement;
-        BT_Spawn = root.Q<Button>("BT_Spawn");
-        BT_Spawn.RegisterCallback<ClickEvent>(Spawn => Enemy_Manager.Singleton.Spawn_Group(1));
 
         BT_MagicWall = root.Q<Button>("BT_MagicWall");
         BT_MagicWall.RegisterCallback<ClickEvent>(Spawn => Game_Manager.Singleton.MagicWall_Cast());
