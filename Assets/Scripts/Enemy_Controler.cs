@@ -50,6 +50,11 @@ public class Enemy_Controler : MonoBehaviour
         StartCoroutine(Display_Health());
     }
 
+    public void Set_SpeedBoost()
+    {
+        transform.parent.GetComponent<Group_Controler>().Set_SpeedBoost();
+    }
+
     IEnumerator Display_Health()
     {
         float timer = 0f;

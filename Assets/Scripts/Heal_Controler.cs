@@ -5,29 +5,31 @@ using UnityEngine;
 public class Heal_Controler : MonoBehaviour
 {
     int healing = 50;
-    List<GameObject> L_Targets;
+    List<GameObject> L_Orcs;
 
     void Awake()
     {
-        L_Targets = new List<GameObject>();
+        L_Orcs = new List<GameObject>();
     }
 
     public void Heal()
     {
-        foreach(GameObject unit in L_Targets)
-            unit.GetComponent<Enemy_Controler>().Set_Heal(healing);
+        foreach(GameObject orc in L_Orcs)
+            if (orc != null)
+                orc.GetComponent<Enemy_Controler>().Set_Heal(healing);
+
         Destroy(gameObject);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy" && L_Targets.Contains(other.gameObject) == false)
-            L_Targets.Add(other.gameObject);
+        if (other.tag == "Enemy" && L_Orcs.Contains(other.gameObject) == false)
+            L_Orcs.Add(other.gameObject);
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Enemy" && L_Targets.Contains(other.gameObject) == true)
-            L_Targets.Remove(other.gameObject);
+        if (other.tag == "Enemy" && L_Orcs.Contains(other.gameObject) == true)
+            L_Orcs.Remove(other.gameObject);
     }
 }

@@ -6,15 +6,14 @@ public class Tower_Controller : MonoBehaviour
 {
     Transform canon;
     GameObject projectile_Prefab;
-    List<GameObject> L_Targets;
+    Transform target;
     public int fire_Damage = 25;
     public int fire_Rate = 5;
     float fire_Cooldown;
-    int targetID;
+    float fire_Range = 10f;
 
     void Awake()
     {
-        L_Targets = new List<GameObject>();
         fire_Cooldown = 0;
         projectile_Prefab = Resources.Load<GameObject>("Defenses/Canon_Projectile");
         canon = transform.Find("weapon_cannon").Find("cannon").transform;
@@ -23,67 +22,59 @@ public class Tower_Controller : MonoBehaviour
     void Update()
     {
         if (Game_Manager.Singleton.isGameStarted == false)
-        {
-            L_Targets = new List<GameObject>();
             return;
-        }
             
         // Refresh fire cooldown
         if (fire_Cooldown > 0)
             fire_Cooldown -= Time.deltaTime;
 
         // Check if enemies still alive and adjust target list
-        bool isTargetListChanged = false;
-        if (L_Targets.Count > 0)
-        {
-            for (int targetNum = L_Targets.Count-1; targetNum >= 0; targetNum--)
-            {
-                Enemy_Controler enemy = L_Targets[targetNum].GetComponent<Enemy_Controler>();
-                if (enemy == null)
-                {
-                    L_Targets.RemoveAt(targetNum);
-                    isTargetListChanged = true;
-                }                    
-                else if (enemy.Is_Alive() == false)
-                {
-                    L_Targets.RemoveAt(targetNum);
-                    isTargetListChanged = true;
-                }
-            }
-        }
+        if (target == null)
+            Get_Target();
 
         // Look at target and fire if cooldown up
-        if (L_Targets.Count > 0)
+        if (target != null)
         {
-            if (isTargetListChanged == true)
-                targetID = Random.Range(0, L_Targets.Count);
-
-            canon.transform.LookAt(L_Targets[targetID].transform.position);
+            canon.transform.LookAt(target.transform.position);
             canon.rotation *= Quaternion.Euler(90,0,0);
             if (fire_Cooldown <= 0)
             {
                 fire_Cooldown = (float) 1/fire_Rate;
-                Fire_OnFirstTarget(targetID);
+                Fire_OnFirstTarget();
+                Get_Target();
             }
         }
     }
 
-    void Fire_OnFirstTarget(int TargetID)
+    void Get_Target()
     {
-        Enemy_Controler enemy = L_Targets[TargetID].GetComponent<Enemy_Controler>();
+        List<Transform> L_Orcs = new List<Transform>();
+        foreach (Transform orc in Enemy_Manager.Singleton.L_Orcs)
+        {
+            if (orc != null)
+            {
+                float distance = Vector3.Distance(orc.position, transform.position);
+                if (distance <= fire_Range)
+                {
+                    if (orc.GetComponent<Enemy_Controler>().Is_Alive() == true)
+                        L_Orcs.Add(orc);
+                }
+            }   
+        }
+
+        if (L_Orcs.Count > 0)
+        {
+            int targetID = Random.Range(0, L_Orcs.Count);
+            target = L_Orcs[targetID];
+        }
+        else target = null;
+
+    }
+
+    void Fire_OnFirstTarget()
+    {
+        Enemy_Controler enemy = target.GetComponent<Enemy_Controler>();
         GameObject projectile = Instantiate(projectile_Prefab, transform.position, Quaternion.identity);
-        projectile.GetComponent<Projectile_Controler>().Init(L_Targets[TargetID].transform, canon.position, fire_Damage);
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Enemy" && L_Targets.Contains(other.gameObject) == false)
-            L_Targets.Add(other.gameObject);
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Enemy" && L_Targets.Contains(other.gameObject) == true)
-            L_Targets.Remove(other.gameObject);
+        projectile.GetComponent<Projectile_Controler>().Init(target.transform, canon.position, fire_Damage);
     }
 }

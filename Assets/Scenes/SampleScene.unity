@@ -2984,6 +2984,7 @@ MonoBehaviour:
   villager_Health: 20
   warrior_Health: 100
   shaman_Health: 50
+  L_Orcs: []
 --- !u!1001 &384842659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5586,6 +5587,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 715669070}
+  - component: {fileID: 715669071}
   m_Layer: 0
   m_Name: Defenses
   m_TagString: Untagged
@@ -5600,7 +5602,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715669069}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5609,9 +5611,22 @@ Transform:
   - {fileID: 935250211}
   - {fileID: 35820331}
   - {fileID: 767241043}
-  m_Father: {fileID: 1334793064}
+  m_Father: {fileID: 1027595087}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &715669071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715669069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a0d0b56fae1154eac377b5b4b0b689, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  L_Defenses: []
 --- !u!1001 &722268256
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7249,6 +7264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
   isGameStarted: 0
+  game_Timer: 0
   orcs_Saved: 0
   orcs_ToSave: 20
 --- !u!4 &1027595087
@@ -7263,10 +7279,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 715669070}
   - {fileID: 1334793064}
-  - {fileID: 381287653}
   - {fileID: 1228826931}
-  - {fileID: 1155947704}
+  - {fileID: 381287653}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8441,13 +8457,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1155947703}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1027595087}
-  m_RootOrder: -1
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1155947705
 AudioSource:
@@ -9778,7 +9794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1334793064}
   m_Layer: 0
-  m_Name: Map1
+  m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9800,7 +9816,6 @@ Transform:
   - {fileID: 1429114838}
   - {fileID: 1967596127}
   - {fileID: 1083325204}
-  - {fileID: 715669070}
   - {fileID: 1759779402}
   m_Father: {fileID: 1027595087}
   m_RootOrder: -1

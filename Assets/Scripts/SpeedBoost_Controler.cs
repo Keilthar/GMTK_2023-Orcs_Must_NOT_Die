@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield_Controler : MonoBehaviour
+public class SpeedBoost_Controler : MonoBehaviour
 {
     int shield = 2;
     List<GameObject> L_Orcs;
@@ -12,11 +12,11 @@ public class Shield_Controler : MonoBehaviour
         L_Orcs = new List<GameObject>();
     }
 
-    public void Shield()
+    public void SpeedBoost()
     {
         foreach(GameObject orc in L_Orcs)
             if (orc != null)
-                orc.GetComponent<Enemy_Controler>().Set_Shield(shield);
+                orc.GetComponent<Enemy_Controler>().Set_SpeedBoost();
 
         Destroy(gameObject);
     }

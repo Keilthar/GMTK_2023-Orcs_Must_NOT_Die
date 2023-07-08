@@ -20,18 +20,19 @@ public class Game_Manager : MonoBehaviour
     public Transform cam;
 
     public bool isGameStarted;
-    float game_Timer;
+    public float game_Timer;
     public int orcs_Saved;
     public int orcs_ToSave = 20;
 
     bool mouse_left_pressed;
     bool mouse_right_pressed;
-    bool rotation_Pressed;
     Transform magics_Parent;
     Transform orcs_Parent;
+    public List<float> L_Scores;
 
     void Start()
     {
+        L_Scores = new List<float>();
         cam = GameObject.Find("Main Camera").transform;
         magics_Parent = transform.Find("Magics");
         orcs_Parent = transform.Find("Orcs");
@@ -45,14 +46,11 @@ public class Game_Manager : MonoBehaviour
 
         mouse_left_pressed = false;
         mouse_right_pressed = false;
-        rotation_Pressed = false;
     
         if (Input.GetKeyDown(KeyCode.Mouse0))
             mouse_left_pressed = true;
         if (Input.GetKeyDown(KeyCode.Mouse1))
             mouse_right_pressed = true;
-        if (Input.GetKeyDown(KeyCode.R))
-            rotation_Pressed = true;
 
         if (Input.GetKeyDown(KeyCode.Space))
             Enemy_Manager.Singleton.Spawn_Group(1);
@@ -61,16 +59,18 @@ public class Game_Manager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
             Heal_Cast();
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            Shield_Cast();        
+            Shield_Cast();
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            SpeedBoost_Cast(); 
     }
 
     void Init_Game()
     {
         isGameStarted = false;
-        orcs_Saved = 0;
-        game_Timer = 0f;
         Clear_Magic();
         Clear_Orcs();
+        orcs_Saved = 0;
+        game_Timer = 0f;
     }
 
     public void Orc_Saved()
@@ -79,6 +79,7 @@ public class Game_Manager : MonoBehaviour
         if (orcs_Saved >= orcs_ToSave)
         {
             Debug.Log("Game Win in " + game_Timer);
+            L_Scores.Add(game_Timer);
             Init_Game();
         }
     }
@@ -91,7 +92,7 @@ public class Game_Manager : MonoBehaviour
             MagicWall_Controler wall = child.GetComponent<MagicWall_Controler>();
             if (wall != null)
             {
-                if (wall.isDeployed == false || isGameStarted == false)
+                if (wall.isDeployed == false)
                     Destroy(child.gameObject);
             }
             else Destroy(child.gameObject);
@@ -124,16 +125,11 @@ public class Game_Manager : MonoBehaviour
                 isMagicDeployed = true;
             if (mouse_right_pressed == true)
                 break;
-
-            Vector3 rotation = Vector3.zero;
-            if (rotation_Pressed)
-                rotation = new Vector3(45,0,0);
                 
 
             Vector3 mousePosition = Mouse_Get_Position();
             Vector3 offsetPosition = Vector3.up * 2.5f;
             spell.transform.position = mousePosition + offsetPosition;
-            spell.transform.rotation *=  Quaternion.Euler(rotation);
 
             yield return new WaitForEndOfFrame();
         }
@@ -167,15 +163,9 @@ public class Game_Manager : MonoBehaviour
             if (mouse_right_pressed == true)
                 break;
 
-            Vector3 rotation = Vector3.zero;
-            if (rotation_Pressed)
-                rotation = new Vector3(45,0,0);
-                
-
             Vector3 mousePosition = Mouse_Get_Position();
             Vector3 offsetPosition = Vector3.up * 0f;
             spell.transform.position = mousePosition + offsetPosition;
-            spell.transform.rotation *=  Quaternion.Euler(rotation);
 
             yield return new WaitForEndOfFrame();
         }
@@ -209,21 +199,51 @@ public class Game_Manager : MonoBehaviour
             if (mouse_right_pressed == true)
                 break;
 
-            Vector3 rotation = Vector3.zero;
-            if (rotation_Pressed)
-                rotation = new Vector3(45,0,0);
-                
-
             Vector3 mousePosition = Mouse_Get_Position();
             Vector3 offsetPosition = Vector3.up * 0f;
             spell.transform.position = mousePosition + offsetPosition;
-            spell.transform.rotation *=  Quaternion.Euler(rotation);
 
             yield return new WaitForEndOfFrame();
         }
 
         if (isMagicDeployed == true)
             spell.GetComponent<Shield_Controler>().Shield();
+        else
+            Destroy(spell);
+        
+        yield break;
+    }
+
+    public void SpeedBoost_Cast()
+    {
+        Clear_Magic();
+        StartCoroutine(SpeedBoost_Placement());
+    }
+
+    IEnumerator SpeedBoost_Placement()
+    {
+        bool isMagicDeployed = false;
+        GameObject prefab = Resources.Load<GameObject>("Magics/SpeedBoost");
+        GameObject spell = Instantiate(prefab, Vector3.down * 10, Quaternion.identity);
+        spell.transform.rotation = Quaternion.Euler(0,0,90);
+        spell.transform.parent = magics_Parent;
+
+        while (isMagicDeployed == false)
+        {
+            if (mouse_left_pressed == true)
+                isMagicDeployed = true;
+            if (mouse_right_pressed == true)
+                break;
+
+            Vector3 mousePosition = Mouse_Get_Position();
+            Vector3 offsetPosition = Vector3.up * 0f;
+            spell.transform.position = mousePosition + offsetPosition;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        if (isMagicDeployed == true)
+            spell.GetComponent<SpeedBoost_Controler>().SpeedBoost();
         else
             Destroy(spell);
         

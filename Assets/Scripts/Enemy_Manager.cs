@@ -112,8 +112,9 @@ public class Enemy_Manager : MonoBehaviour
         public int shaman_Health = 50;
 
     int enemyCounter;
-    float spawn_Cooldown = 1f;
+    float spawn_Cooldown = 2f;
     float spawn_Timer;
+    public List<Transform> L_Orcs;
     
 
     void Start()
@@ -125,6 +126,11 @@ public class Enemy_Manager : MonoBehaviour
     {
         if (spawn_Timer > 0)
             spawn_Timer -= Time.deltaTime;
+
+        L_Orcs = new List<Transform>();
+        foreach(Transform group in transform)
+            foreach(Transform orc in group)
+                L_Orcs.Add(orc);  
     }
 
     public void Spawn_Group(int GroupID)
@@ -143,6 +149,5 @@ public class Enemy_Manager : MonoBehaviour
                 enemyCounter++;
             }
         }
-
     }
 }
