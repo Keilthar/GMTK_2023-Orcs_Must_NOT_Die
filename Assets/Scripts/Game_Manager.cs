@@ -17,10 +17,12 @@ public class Game_Manager : MonoBehaviour
     }
 #endregion
 
+    const int mana_Max = 100;
+    public int mana_Current;
     public int enemy_Kill_Counter;
 
     void Start()
     {
         enemy_Kill_Counter = 0;
-    }
+    } 
 }

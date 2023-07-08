@@ -99,7 +99,7 @@ public class Enemy_Manager : MonoBehaviour
         enemyCounter = 0;
     }
 
-    public void Spawn_Enemy(int GroupID)
+    public void Spawn_Group(int GroupID)
     {
         GameObject prefab = Resources.Load<GameObject>("Enemies/Groups/Group_" + GroupID);
         GameObject enemy = Instantiate(prefab, Vector3.zero, Quaternion.identity);

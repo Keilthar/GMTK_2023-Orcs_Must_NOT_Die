@@ -19,13 +19,12 @@ public class UI_Manager : MonoBehaviour
 #endregion
 
     VisualElement root;
-    Button BT_Warrior;
-    Button BT_Shaman;
+    Button BT_Group1;
 
     void Start()
     {
         root = transform.GetComponent<UIDocument>().rootVisualElement;
-        BT_Warrior = root.Q<Button>("BT_Warrior");
-        BT_Warrior.RegisterCallback<ClickEvent>(Spawn => Enemy_Manager.Singleton.Spawn_Enemy(1));
+        BT_Group1 = root.Q<Button>("BT_Group1");
+        BT_Group1.RegisterCallback<ClickEvent>(Spawn => Enemy_Manager.Singleton.Spawn_Group(1));
     }
 }

@@ -7,6 +7,7 @@ public class Path_Manager : MonoBehaviour
 {
 #region Singleton
     public static Path_Manager Singleton;
+    LineRenderer line;
     private void Awake()
     {
         if (Singleton!= null)
@@ -22,6 +23,8 @@ public class Path_Manager : MonoBehaviour
     void Start()
     {
         path = transform.GetComponent<SplineContainer>();
+        line = transform.GetComponent<LineRenderer>();
+        Draw_Path();
     }
 
     public Vector3 Path_GetPosition(float Distance)
@@ -31,6 +34,18 @@ public class Path_Manager : MonoBehaviour
         path_Position += transform.position;
 
         return path_Position;
+    }
+
+    void Draw_Path()
+    {
+        float path_Length = path.Spline.GetLength();
+        line.positionCount = 100;
+        for (int pos = 0; pos < line.positionCount; pos++)
+        {
+            float distance = (float) pos / (float) (line.positionCount - 1) * path_Length;
+            Vector3 position = Path_GetPosition(distance);
+            line.SetPosition(pos, position);
+        }
     }
 
 }
