@@ -4,30 +4,30 @@ using UnityEngine;
 
 public class Projectile_Controler : MonoBehaviour
 {
-    public AnimationCurve trajectory;
     int damage;
     public float speed = 20;
     Vector3 position_Initial;
     Vector3 position_Final;
-    Transform target;
     float travel_Time;
     float timer;
 
     public void Init(Transform Target, Vector3 PositionInitial, int Damage)
     {
-        target = Target;
         position_Initial = PositionInitial;
+        position_Final = Target.position;
         damage = Damage;
         transform.position = position_Initial;
-        travel_Time = Vector3.Distance(position_Initial, target.position) / speed;
+        travel_Time = Vector3.Distance(position_Initial, Target.position) / speed;
         timer = 0;
     }
 
     void Update()
     {
-        if (target != null)
+        if (position_Final != null)
         {
-            transform.position = Vector3.Lerp(position_Initial, target.position, timer / travel_Time);
+            transform.position = Vector3.Lerp(position_Initial, position_Final, timer / travel_Time);
+            if (transform.position == position_Final)
+                Destroy(gameObject);
             timer += Time.deltaTime;
         }
             
@@ -35,14 +35,13 @@ public class Projectile_Controler : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "MagicWall")
+        if (other.tag == "MagicWall" || other.tag == "Ground")
             Destroy(gameObject);
 
-        if (other.gameObject == target.gameObject)
+        if (other.tag == "Enemy")
         {
             Enemy_Controler enemy = other.gameObject.GetComponent<Enemy_Controler>();
             enemy.Set_Damage(damage);
-            Destroy(gameObject);
         }
     }
 }

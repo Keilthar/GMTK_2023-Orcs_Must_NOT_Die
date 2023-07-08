@@ -26,15 +26,35 @@ public class Enemy
 {
     public int health_Max;
     public int health_Current;
+    public int shield_Count;
+    public bool speed;
+
 
     public void Set_Damage(int DamageTaken)
     {
-        health_Current -= DamageTaken;
+        if (shield_Count > 0)
+            shield_Count--;
+        else
+            health_Current -= DamageTaken;
     }
 
     public void Set_Heal(int HealTaken)
     {
         health_Current += HealTaken;
+        if (health_Current > health_Max)
+            health_Current = health_Max;
+    }
+
+    public void Set_Shield(int ShieldCount)
+    {
+        shield_Count += ShieldCount;
+        if (shield_Count > 2)
+            shield_Count = 2;
+    }
+
+    public void Set_Speed(bool Status)
+    {
+        speed = Status;
     }
 }
 

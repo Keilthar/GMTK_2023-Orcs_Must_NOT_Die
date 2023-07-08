@@ -5,15 +5,24 @@ using UnityEngine;
 public class MagicWall_Controler : MonoBehaviour
 {
     float lifeTime = 5f;
-    // Start is called before the first frame update
-    void Start()
+    public bool isDeployed;
+    float timer;
+
+    public void Init()
     {
-        
+        isDeployed = true;
+        timer = 0f;
+        transform.GetComponent<CapsuleCollider>().enabled = true;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+        if (isDeployed == true)
+        {
+            timer += Time.deltaTime;
+            if (timer >= lifeTime)
+                Destroy(gameObject);
+        }
     }
 }
