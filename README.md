@@ -1,5 +1,5 @@
 # Orcs Must NOT Die !
-![alt text]([http://url/to/img.png](https://img.itch.zone/aW1hZ2UvMjE1ODMwMS8xMjcxODk4OC5wbmc=/original/4jjjqR.png))
+![Alt text](https://img.itch.zone/aW1hZ2UvMjE1ODMwMS8xMjcxODk4OC5wbmc=/original/4jjjqR.png)
 
 - - - - - - - - - - - - - - - - - - - - - -
 Game available for free on itchi.io :
