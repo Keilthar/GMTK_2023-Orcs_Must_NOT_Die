@@ -2,26 +2,38 @@
 ![Alt text](https://img.itch.zone/aW1hZ2UvMjE1ODMwMS8xMjcxODk4OC5wbmc=/original/4jjjqR.png)
 
 - - - - - - - - - - - - - - - - - - - - - -
-Game available for free on itchi.io :
+## Game Info
+
+**Game available for free on itchi.io** :
+
   https://keilthar.itch.io/orcs-must-not-die
+  
 - - - - - - - - - - - - - - - - - - - - - -
 
-Game submitted for the GMTK GameJam 2023 with the theme : Roles Reversed.
+Game submitted for the **GMTK GameJam 2023** with the theme : **Roles Reversed**.
 
-It's a reversed Tower Defense :
-Protect the poor orcs form those evil towers and save 20 of them as quick as possible !
-Use you spells to help them reach the exit and show us how a good orc manager you are !
+It's a **reversed Tower Defense** :
 
-Game made solo in nearly 15 hours.
+**Protect the poor orcs** form those evil towers and **save 20 of them** as quick as possible !
+**Use you spells** to help them reach the exit and show us how a good orc protector you are !
+
+**Solo dev game made on Unity** in nearly 15 hours.
 
 - - - - - - - - - - - - - - - - - - - - - -
-Free assets used :
-3D models :
+## Free assets used
+
+**3D models**
+
   Map Elements :
-  	https://kenney.nl/assets/tower-defense-kit
+  
+    https://kenney.nl/assets/tower-defense-kit
+   
   Orcs : (no animation)
+  
   	https://kenney.nl/assets/mini-dungeon
-Music :
+
+**Music**
+
   https://incompetech.com/music/royalty-free/music.html
   
   "Ancient Mystery Waltz (Presto)" Kevin MacLeod (incompetech.com)
