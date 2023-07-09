@@ -8,6 +8,7 @@ public class Group_Controler : MonoBehaviour
     float speedBoost_Duration = 3f;
     float speedBoost_Timer;
     float speedBoost_Force = 2f;
+    public bool isSpeedBosstActiv;
 
     void Awake()
     {
@@ -26,8 +27,10 @@ public class Group_Controler : MonoBehaviour
         if (speedBoost_Timer > 0)
         {
             speed *= speedBoost_Force;
+            isSpeedBosstActiv = true;
             speedBoost_Timer -= Time.deltaTime;
         }
+        else isSpeedBosstActiv = false;
 
         moving_Distance += Time.deltaTime * speed;
         Vector3 position_New = Path_Manager.Singleton.Path_GetPosition(moving_Distance);

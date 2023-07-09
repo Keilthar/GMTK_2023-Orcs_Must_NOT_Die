@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class Enemy_Controler : MonoBehaviour
 {
+    public AudioSource audioDamage;
+    public AudioClip damageClip;
+    public AudioSource audioDeath;
+    public AudioClip deathClip;
+    public AudioSource audioSpawn;
+    public AudioClip spawnClip;
     const float health_Display_Timer = 0.2f;
     Enemy enemy;
     Transform healthBar;
@@ -18,12 +24,14 @@ public class Enemy_Controler : MonoBehaviour
         health = healthBar.Find("Health_Amount").GetComponent<Image>();
         buffBar = transform.Find("Buff_Bar");
         Display_Buff();
+        audioSpawn.PlayOneShot(spawnClip);
     }
 
     void Update()
     {
         healthBar.LookAt(Game_Manager.Singleton.cam.position);
         buffBar.LookAt(Game_Manager.Singleton.cam.position);
+        Display_Buff();
     }
 
     public void Set_Damage(int DamageTaken)
@@ -34,6 +42,8 @@ public class Enemy_Controler : MonoBehaviour
 
         if (enemy.health_Current <= 0)
             Death();
+        else
+            audioDamage.PlayOneShot(damageClip);
     }
 
     public void Set_Heal(int HealTaken)
@@ -61,8 +71,6 @@ public class Enemy_Controler : MonoBehaviour
         float fillAmount_Current = health.fillAmount;
         float fillAmount_New = (float) enemy.health_Current / enemy.health_Max;
 
-        Display_Buff();
-
         while (timer < health_Display_Timer)
         {
             health.fillAmount = fillAmount_Current - (fillAmount_Current - fillAmount_New) * timer / health_Display_Timer;
@@ -86,7 +94,10 @@ public class Enemy_Controler : MonoBehaviour
         else
             buffBar.Find("Shield_2").GetComponent<Image>().enabled = false;
 
-        buffBar.Find("Speed").GetComponent<Image>().enabled = enemy.speed;
+        if (transform.parent.GetComponent<Group_Controler>().isSpeedBosstActiv == true)
+            buffBar.Find("Speed").GetComponent<Image>().enabled = true;
+        else
+            buffBar.Find("Speed").GetComponent<Image>().enabled = false;
     }
 
     public bool Is_Alive()
@@ -99,12 +110,13 @@ public class Enemy_Controler : MonoBehaviour
 
     public void Death()
     {
+        audioDeath.PlayOneShot(deathClip);
         StartCoroutine(Die());
     }
 
     IEnumerator Die()
     {
-        yield return new WaitForSeconds(health_Display_Timer);
+        yield return new WaitForSeconds(0.4f);
         Destroy(gameObject);
     }
 }

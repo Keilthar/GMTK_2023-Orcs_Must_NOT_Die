@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Tower_Controller : MonoBehaviour
 {
+    public AudioSource audioFire;
+    public AudioClip fireClip;
     Transform canon;
     GameObject projectile_Prefab;
     Transform target;
@@ -73,6 +75,7 @@ public class Tower_Controller : MonoBehaviour
 
     void Fire_OnFirstTarget()
     {
+        audioFire.PlayOneShot(fireClip);
         Enemy_Controler enemy = target.GetComponent<Enemy_Controler>();
         GameObject projectile = Instantiate(projectile_Prefab, transform.position, Quaternion.identity);
         projectile.GetComponent<Projectile_Controler>().Init(target.transform, canon.position, fire_Damage);

@@ -78,8 +78,8 @@ public class Game_Manager : MonoBehaviour
         orcs_Saved ++;
         if (orcs_Saved >= orcs_ToSave)
         {
-            Debug.Log("Game Win in " + game_Timer);
             L_Scores.Add(game_Timer);
+            UI_Manager.Singleton.Display_Win();
             Init_Game();
         }
     }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SpeedBoost_Controler : MonoBehaviour
 {
-    int shield = 2;
     List<GameObject> L_Orcs;
 
     void Awake()

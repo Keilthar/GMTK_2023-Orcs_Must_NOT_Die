@@ -139,7 +139,11 @@ public class Enemy_Manager : MonoBehaviour
         {
             spawn_Timer = spawn_Cooldown;
             if (Game_Manager.Singleton.isGameStarted == false)
+            {
                 Game_Manager.Singleton.isGameStarted = true;
+                UI_Manager.Singleton.Hide_Win();
+            }
+                
 
             GameObject prefab = Resources.Load<GameObject>("Enemies/Groups/Group_" + GroupID);
             GameObject enemy = Instantiate(prefab, Vector3.zero, Quaternion.identity);
