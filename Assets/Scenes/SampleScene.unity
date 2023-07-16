@@ -6421,6 +6421,7 @@ GameObject:
   - component: {fileID: 883426753}
   - component: {fileID: 883426752}
   - component: {fileID: 883426754}
+  - component: {fileID: 883426756}
   m_Layer: 0
   m_Name: UI_Manager
   m_TagString: Untagged
@@ -6445,8 +6446,8 @@ MonoBehaviour:
   sourceAsset: {fileID: 9197481963319205126, guid: dc9a60601df86b24bb3c17d71f92e651,
     type: 3}
   m_SortingOrder: 0
---- !u!4 &883426753
-Transform:
+--- !u!224 &883426753
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -6460,6 +6461,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &883426754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6472,6 +6478,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93fd64da535f59b49ad1863f9fa72f2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!223 &883426756
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883426751}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1001 &895427053
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7380,12 +7409,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61e73987fd010ce46bc106e9319b0853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
   isGameStarted: 0
   game_Timer: 0
   orcs_Saved: 0
   orcs_ToSave: 20
   L_Scores: []
+  cooldown_Wall: 1
+  cooldown_Heal: 1
+  cooldown_Shield: 1
+  cooldown_Speed: 1
+  cam: {fileID: 0}
 --- !u!4 &1027595087
 Transform:
   m_ObjectHideFlags: 0

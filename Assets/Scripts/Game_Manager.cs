@@ -17,18 +17,30 @@ public class Game_Manager : MonoBehaviour
     }
 #endregion
 
-    public Transform cam;
 
-    public bool isGameStarted;
-    public float game_Timer;
-    public int orcs_Saved;
-    public int orcs_ToSave = 20;
+    [Header("Game Status")]
+        public bool isGameStarted;
+        public float game_Timer;
+        public int orcs_Saved;
+        public int orcs_ToSave = 20;
+        public List<float> L_Scores;
 
-    bool mouse_left_pressed;
-    bool mouse_right_pressed;
-    Transform magics_Parent;
-    Transform orcs_Parent;
-    public List<float> L_Scores;
+    [Header("Spell Cooldowns")]
+        public float cooldown_Wall;
+        float timer_Wall;
+        public float cooldown_Heal;
+        float timer_Heal;
+        public float cooldown_Shield;
+        float timer_Shield;
+        public float cooldown_Speed;
+        float timer_Speed;
+
+    [Header("Divers")]
+        public Transform cam;
+        Transform magics_Parent;
+        Transform orcs_Parent;
+        bool mouse_left_pressed;
+        bool mouse_right_pressed;
 
     void Start()
     {
@@ -42,7 +54,14 @@ public class Game_Manager : MonoBehaviour
     void Update()
     {
         if (isGameStarted == true)
+        {
             game_Timer += Time.deltaTime;
+            timer_Wall += Time.deltaTime;
+            timer_Heal += Time.deltaTime;
+            timer_Shield += Time.deltaTime;
+            timer_Speed += Time.deltaTime;
+        }
+            
 
         mouse_left_pressed = false;
         mouse_right_pressed = false;
@@ -54,13 +73,13 @@ public class Game_Manager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             Enemy_Manager.Singleton.Spawn_Group(1);
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && timer_Wall >= cooldown_Wall)
             MagicWall_Cast();
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && timer_Heal >= cooldown_Heal)
             Heal_Cast();
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && timer_Shield >= cooldown_Shield)
             Shield_Cast();
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.Alpha4) && timer_Speed >= cooldown_Speed)
             SpeedBoost_Cast(); 
     }
 
@@ -107,6 +126,7 @@ public class Game_Manager : MonoBehaviour
     
     public void MagicWall_Cast()
     {
+        timer_Wall = 0;
         Clear_Magic();
         StartCoroutine(MagicWall_Placement());
     }
@@ -144,6 +164,7 @@ public class Game_Manager : MonoBehaviour
 
     public void Heal_Cast()
     {
+        timer_Heal = 0;
         Clear_Magic();
         StartCoroutine(Heal_Placement());
     }
@@ -180,6 +201,7 @@ public class Game_Manager : MonoBehaviour
 
     public void Shield_Cast()
     {
+        timer_Shield = 0;
         Clear_Magic();
         StartCoroutine(Shield_Placement());
     }
@@ -216,6 +238,7 @@ public class Game_Manager : MonoBehaviour
 
     public void SpeedBoost_Cast()
     {
+        timer_Speed = 0;
         Clear_Magic();
         StartCoroutine(SpeedBoost_Placement());
     }
